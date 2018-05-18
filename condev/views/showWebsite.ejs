@@ -1,0 +1,101 @@
+<% include partials/header %>
+<% include partials/center%>
+    <div class="box">
+        <%if(doc){%>
+            <div class="inline">
+                <%if(session.user == doc.author){%>
+                    <form action="/websites/delete<%=doc._id%>" method="post">
+                        <input type="submit"  id="toggle8" value="Delete" class="submit">            
+                    </form>
+                <%}%>
+                <%if(session.user == doc.author && !doc.closed){%>
+                    <form action="/websites/close<%=doc._id%>" method="post">
+                        <input type="submit"  id="toggle8" value="Close" class="submit">            
+                    </form>
+                    <i class="material-icons" onmouseover="opendiv('info')" onmouseout="opendiv('info')">info</i>
+                    <p id="info" style="display:none !important">Close a website when you have hired someone for all jobs.</p>
+                <%}%>
+            </div>
+            <div class="header-pair">
+                <h1 onclick="opendiv('updateTitle')" id="title" class="subtitle"><%=doc.name%></h1>
+                <%if(session.user == doc.author){%>
+                    <form style="display:none;width:100%;padding:0" id="updateTitle" action="/websites/update<%=doc._id%>/name" method="post" onsubmit="opendiv('updateTitle')">
+                        <input type="text" name="value" value="<%=doc.name%>" class="titleUpd" autocomplete="off">  
+                    </form>
+                <%}%>
+            </div>
+            <hr>
+            <h2 style="color:grey;"><a href="/clients/<%=doc.author%>"><%=doc.author%></a></h2>
+            <%if(doc.closed){%>
+                <h2><%=doc.name%> is closed</h2>
+            <%}%>
+            <p id="descrip" onclick="opendiv('form3')">
+                <%=doc.description%>
+            </p>
+            <%if(session.user == doc.author){%>
+                <form id="form3" style="display:none;" action="/websites/update<%=doc._id%>/description" method="post">
+                    <textarea name="value" class="textarea" style="font-size:3vh;"><%=doc.description%></textarea>  
+                    <input type="submit" value="Update" class="submit">
+                </form> 
+            <%}%>
+            <hr>
+            <%for(var i = 0; i < jobs.length; i++){%>
+                <%if(jobs[i].closed){%>
+                    <%var app = jobs[i].applicants[jobs[i].applicants.search('chosen', true)]%>
+                    <%var name = app ? app.name : "Nobody"%>
+                    <p><%=name%> was selected for <%=jobs[i].name%></p>
+                <%}else{%>
+                    <div class="inline jobDisplay" style="margin:0;">
+                        <p><%=jobs[i].name%> </p>
+                        <p style="color:transparent;"> || </p>
+                        <p>Payment: $<%=jobs[i].payment%></p>
+                        <p style="color:transparent;"> || </p>
+                        <% if(session.user == doc.author){%>
+                            <form method="post" action="/jobs<%=jobs[i]._id%>/delete<%=doc._id%>/<%=jobs[i].name%>">
+                                <input type="submit" class="submit" value="X">
+                            </form>
+                        <%}else{%>
+                            <form method="post" action="/jobs<%=jobs[i]._id%>/apply<%=doc._id%>">
+                                <input type="submit" class="submit cta" value="Apply">
+                            </form>
+                        <%}%>
+                        <button onclick="opendiv('applicants<%=i%>')" class="bttn minor">|||</button>
+                    </div>
+                <%}%>
+                <div id="applicants<%=i%>" style="display:none">
+                    <%if(jobs[i].applicants.length !== 0){%>
+                        <p style="margin:0">Applicants:</p>
+                        <%for(var y = 0; y < jobs[i].applicants.length; y++){%>
+                            <div class="inline" style="margin:0">
+                                <a href="/devs/<%=jobs[i].applicants[y].name%>" class="bttn" style="font-size:3vh;text-decoration:underline;color:grey;padding:0"><%=jobs[i].applicants[y].name%></a>
+                                <p style="color:transparent"> || </p>
+                                <%if(session.user == doc.author){%>
+                                    <form action="/jobs<%=jobs[i]._id%>/addApp<%=doc._id%>/<%=jobs[i].applicants[y].name%>" method="post">
+                                        <input type="submit" class="submit" value="Accept">
+                                    </form>
+                                    <form action="/jobs<%=jobs[i]._id%>/delApp<%=doc._id%>/<%=jobs[i].applicants[y].name%>" method="post">
+                                        <input type="submit" class="submit" value="Deny">
+                                    </form>
+                                <%}%>
+                            </div>
+                        <%}%>
+                    <%}else{%>
+                        <p>No applicants</p>
+                    <%}%>     
+                </div>
+            <%}%>
+            <%if(session.user == doc.author && !doc.closed){%>
+                <button type="button" class="submit cta" onclick="opendiv('newJobs')">Add job</button>
+                <form method="post" action="/jobs/create<%=doc._id%>" id="newJobs" style="display:none;">
+                    <input type="text" name="name" placeholder="Job name" class="titleUpd" onfocus="opendiv('info2')" onfocusout="opendiv('info2')">
+                    <p id="info2" style="display:none !important">Include a programming language in your job (ex. 'Java developer')</p>
+                    <input type="number" name="payment" placeholder="Payment (USD)" class="titleUpd">
+                    <button class="submit">Add</button>
+                </form>
+            <%}%>
+            <% include partials/error%>
+        <%}else{%>
+            <p>Sorry, Website not found</p>
+        <%}%>
+    </div>
+<% include partials/footer %>

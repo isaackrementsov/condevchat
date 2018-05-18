@@ -1,0 +1,37 @@
+<%include partials/header%>
+<%include partials/center%>
+<%if(website){%>
+    <%if(!website.done){%>
+        <div class="box">
+            <h1 class="subtitle">Create a task</h1>
+            <hr>
+            <form action="/addTasks/<%=website._id%>/<%=website.author%>" method="post" id="form" onsubmit="amalg2('taskName', 'taskDesc', 'taskData')">
+                <div class="inline">
+                    <div>
+                        <input type="text" name="name" placeholder="Task name" autocomplete="off" class="titleUpd" style="display:block">
+                        <textarea name="description" placeholder="Description" class="textarea" style="width:17vw;height:35vh" style="display:block"></textarea>
+                    </div>
+                    <div>
+                        <p class="titleUpd">Members</p>
+                        <div class="members textarea" style="display:block;width:17vw;overflow-y:auto;">
+                            <%for(let i = 0; i < website.members.length; i++){%>
+                                <input type="checkbox" name="members" value='{"name":"<%=website.members[i].name%>", "job":"<%=website.members[i].job%>"}'><p class="msg-box"><%=website.members[i].name%> | <%=website.members[i].job%></p>
+                            <%}%>
+                        </div>
+                    </div>
+                </div>
+                <button class="submit" type="button" onclick="multiExec(createDiv(taskName, 'subTasks'), createDiv(taskDesc, 'subTasks'), createDiv(close, 'subTasks'))">Add SubTask</button>
+                <div id="subTasks">
+                </div>
+                <input type="hidden" style="display:none;" id="taskData" name="taskData">
+                <input type="submit" value="Create" class="submit cta lg">
+            </form>
+            <% include partials/error%>
+        </div>
+    <%}else{%>
+        <p>Website is done!</p>
+    <%}%>
+<%}else{%>
+    <p>No Website found</p>
+<%}%>
+<%include partials/footer%>

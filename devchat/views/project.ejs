@@ -1,0 +1,154 @@
+<%include partials/header%>
+<%include partials/othercenter%>
+<%if(website){%>
+    <div class="projectHeader">
+        <h1><%=website.name%></h1>
+        <h2 style="color:grey"><%=website.author%></h2>
+        <hr style="border-color: whitesmoke; border-width:1.5px;">
+        <div class="inline">
+            <%if(!website.done && (session.user == website.author)){%>
+                <a href="/addTasks/<%=website._id%>" class="cta lg submit" style="margin-right:auto;margin-left:auto">Add task</a>
+                <form action="/finishProject/<%=website._id%>" method="post" style="vertical-align:top">
+                    <input type="submit"value="Finish Project"class=" lg submit" style="margin-right:auto;margin-left:auto">
+                </form>
+                <i class="material-icons" onmouseover="opendiv('info')" onmouseout="opendiv('info')">info</i>
+                <p id="info" style="display:none !important">Finish a project when all tasks are done and you are ready to pay the members</p>
+            <%}else if(website.done){%>
+                <p>Website is done</p>
+            <%}%>
+        </div>
+        <div class="taskList">
+            <%if(tasks.length === 0){%>
+                <p style="color:grey">No tasks yet</p>
+            <%}else{%>
+                <% for(let i = 0; i < tasks.length; i++){
+                    tasks[i].subTasks = tasks[i].subTasks.reverse();
+                    var length = tasks[i].subTasks.filter(function(subTask){return subTask.done == true}).length;
+                    var color;
+                    if(length == 0){
+                        color = '#F0F0F0'
+                    }else if(length == tasks[i].subTasks.length){
+                        color = '#64B5F6';
+                    }else{
+                        color = '#90CAF9';
+                    }%>
+                    <div class="inline" style="display:block">
+                        <a href="/tasks/<%=tasks[i]._id%>"class="task" style="border-left-color:<%=color%>">
+                            <h2 style="display:block"><%=tasks[i].name%></h2>
+                            <p style="display:block"><%=tasks[i].description%></p>
+                        </a>
+                    </div>
+                <%}%>
+            <%}%>
+        </div>
+    </div>
+    <div class="stats" style="overflow:hidden;">
+        <div class="chart">
+            <%var total = tasks.length
+            var progress = tasks.filter(function(task){
+                return (task.subTasks.filter(function(sub){return sub.done == true}).length > 0) && (task.subTasks.filter(function(sub){return !sub.done}).length > 0)
+            }).length;
+            var done = tasks.filter(function(task){
+                return task.done == true
+            }).length;
+            var notDone = tasks.filter(function(task){
+                return task.subTasks.filter(function(sub){return sub.done == true}).length === 0
+            }).length;
+            var pctProgress = 100 * progress/total;
+            var pctDone = 100 * done/total;
+            var pctNotDone = 100 * notDone/total
+            if(tasks.length === 0){
+                pctProgress = 0;
+                pctDone = 0;
+                pctNotDone = 100;
+            }%>
+            <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut">
+                <circle class="donut-hole" cx="21" cy="21" r="15.91549430918954" fill="#F9F9F9"></circle>
+                <circle class="donut-ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#F0F0F0" stroke-width="5"></circle>
+                <circle class="donut-segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#64B5F6" stroke-width="5" stroke-dasharray="<%=pctDone%> <%=100 - pctDone%>" stroke-dashoffset="25"></circle>
+                <circle class="donut-segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#90CAF9" stroke-width="5" stroke-dasharray="<%=pctProgress%> <%=100 - pctProgress%>" stroke-dashoffset="<%=125 - pctDone%>"></circle>
+                <g class="chart-text">
+                    <text x="50%" y="52%" class="chart-label">
+                        <%=Math.round(pctDone)%>% done
+                    </text>
+                    <text x="50%" y="42%" class="chart-label">
+                        <%=Math.round(pctProgress)%>% in progress
+                    </text>
+                    <text x="50%" y="32%" class="chart-label">
+                        <%=Math.round(pctNotDone)%>% not done
+                    </text>
+                </g>
+            </svg>
+        </div>
+        <%if(session.user == website.author && website.githubRepository){%>
+            <p class="inline">
+                <a class="github" href="<%=website.githubRepository%>"><%=website.githubRepository%></a>
+                <i class="material-icons" style="cursor:pointer;" onclick="opendiv('gh')">edit</i>
+                <form action="/updProject/githubRepository/<%=website._id%>" method="post" id="gh" style="display:none" class="inline">
+                    <input type="text" placeholder="GitHub repository" class="titleUpd" name="value">
+                    <input type="submit" value="Add" class="submit lg">                
+                </form>
+            </p>
+        <%}%>
+        <%if(session.user == website.author && !website.githubRepository){%>
+            <form method="post" action="/updProject/githubRepository/<%=website._id%>" class="inline">
+                <input type="text" placeholder="GitHub repository" class="titleUpd" name="value">
+                <input type="submit" value="Add" class="submit lg">
+            </form>
+        <%}%>
+        <h2>Members</h2>
+        <div class="members">
+            <div class="inline margins">
+                <p>Author</p> | 
+                <a href="http://con.dev.us.to/clients/<%=website.author%>">
+                    <%=website.author%>
+                </a>
+            </div>
+            <%for(let i = 0; i < website.members.length; i++){%>
+                <div class="inline margins">
+                    <p>
+                        <%=website.members[i].job%>
+                    </p> | 
+                    <a href="http://con.dev.us.to/devs/<%=website.members[i].name%>"><%=website.members[i].name%></a>
+                </div>
+            <%}%>
+        </div>
+    </div>
+    <div class="chat">
+        <div class="chatList">
+            <%if(website.chats){%>
+                <%for(let i = 0; i < website.chats.length; i++){%>
+                    <%var clss = 'message'%>
+                    <%if(website.chats[i].author == session.user){%>
+                        <%clss = 'sentMessage'%>
+                    <%}%>
+                    <p class="p<%=clss%> inline">
+                        <%=website.chats[i].message%>
+                        <span class="timestamp">
+                            <%if(session.user == website.chats[i].author){%>
+                                You
+                            <%}else{%>
+                                <%=website.chats[i].author%>
+                            <%}%>
+                             | 
+                            <input type="hidden" class="dateAgo" value="<%=website.chats[i].madeAt.getTime()%>">
+                            <span class="timeAgo">
+                                <%=website.chats[i].madeAt.timeAgo()%>
+                            </span>
+                        </span>
+                    </p>
+                <%}%>
+            <%}else{%>
+                <p>Sorry, no messages</p>
+            <%}%>
+        </div>
+        <input type="hidden" value="<%=JSON.stringify(session)%>" id="session">
+        <%if(!website.done){%>
+            <input type="text" class="chat-send" placeholder="Chat" onkeyup="message(event)">
+        <%}%>
+    </div>
+<%}else{%>
+    <h1>Sorry, no website here</h1>
+<%}%>
+<script src="../js/sockets.js"></script>
+<%include partials/footer%>

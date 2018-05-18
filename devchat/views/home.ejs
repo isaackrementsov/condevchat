@@ -1,0 +1,30 @@
+<% include partials/header %>
+<% include partials/center %>
+<h1>Projects</h1>
+<%if(websites.length !== 0){%>
+    <%for(let i = 0; i < websites.length; i++){%>
+        <a href="/projects/<%=websites[i]._id%>" class="shade result" style="padding-bottom:4vh !important;">
+            <h2><%=websites[i].name%> | <%=websites[i].author%></h2>
+            <div class="inline al">
+                <%if(session.dev){%>
+                    <%for(let y = 0; y < websites[i].members.length; y++){%>
+                        <%if(websites[i].members[y].name == session.user){%>
+                            <div class="bubble">
+                                <%=websites[i].members[y].job%>
+                            </div>
+                        <%}%>
+                    <%}%> 
+                <%}else{%>
+                    <div class="bubble">Author</div>
+                <%}%>
+            </div>
+        </a>
+    <%}%>
+<%}else{%>
+    <%if(session.dev){%>
+        <p class="inline">No websites found, <a href="http://con.dev.us.to/" style="font-size:3vh;text-decoration:underline;color:grey">join some!</a></p>
+    <%}else{%>
+        <p class="inline">No websites found, <a href="http://con.dev.us.to/" style="font-size:3vh;text-decoration:underline;color:grey">start some!</a></p>
+    <%}%>
+<%}%>
+<% include partials/footer %>

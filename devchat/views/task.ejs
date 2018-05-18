@@ -1,0 +1,51 @@
+<%include partials/header%>
+<%include partials/center%>
+<%if(task){%>
+    <div class="box">
+        <form method="post" action="/taskDelete/<%=task._id%>/<%=task.websiteId%>">
+            <input type="submit" class="submit lg" value="Delete task">
+        </form>
+        <h1><%=task.name%></h1>
+        <h2 style="color:grey"><%=task.author%></h2>
+        <hr>
+        <p><%=task.description%></p>
+        <hr>
+        <div class="inline">
+            <div style="width:20vw;vertical-align:top;height:50vh;overflow-y:auto">
+                <%for(let i = 0; i < task.subTasks.length; i++){%>
+                    <div class="msg-box">
+                        <h3 style="display:block;text-align:left"><%=task.subTasks[i].name%></h3>
+                        <p style="display:block;text-align:left"><%=task.subTasks[i].description%></p>
+                        <%if(task.subTasks[i].done){%>
+                            <p style="color:#4CAF50">Task finished</p>
+                        <%}else{%>
+                            <form method="post" action="/taskDone/<%=task.subTasks[i]._id%>/<%=task._id%>">
+                                <input type="submit" value="Mark Done" class="submit cta">
+                            </form>
+                        <%}%>
+                    </div>
+                <%}%>
+            </div>
+            <div>
+            <div style="width:20vw;height:50vh;overflow-y:auto;">
+                <%for(let i = 0; i < task.members.length; i++){%>
+                    <div class="msg-box inline" style="display:block">
+                        <p><%=task.members[i].name%> | 
+                        <%=task.members[i].job%></p>
+                    </div>
+                <%}%>
+            </div>
+        </div>
+    </div>
+    <%if(session.user == task.author){%>
+        <button class="lg submit" style="display:block" onclick="opendiv('st')">Add SubTask</button>
+        <form id="st" method="post" action="/addSubTask/<%=task._id%>" style="display:none">
+            <input type="text" class="titleUpd taskName" name="name" placeholder="Task name" name="name">
+            <textarea placeholder="Description" class="textarea titleUpd titleDesc" style="height:20vh;" name="description"></textarea>
+            <input type="submit" class="submit cta" value="Add">
+        </form>
+    <%}%>
+<%}else{%>
+    <p>No task found</p>
+<%}%>
+<%include partials/footer%>
