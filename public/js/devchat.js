@@ -4,18 +4,18 @@ function opendiv(value, d){
     if(div.style.display == "block"){
         div.style.display = " none"
         if(d){
-            d.parentElement.style.right = "0vw";
-            d.parentElement.style.backgroundColor = "transparent";
-            d.parentElement.style.color = "#474747";
-            d.parentElement.innerHTML = `<i class="material-icons" onclick="opendiv('vertical', this)">menu</i>`
+            d.style.right = "0vw";
+            d.style.backgroundColor = "transparent";
+            d.style.color = "#474747";
+            d.innerHTML = `<i class="material-icons" onclick="opendiv('vertical', this)">menu</i>`
         }
     }else{
         div.style.display = "block";
         if(d){
-            d.parentElement.style.right = "16vw";
-            d.parentElement.style.backgroundColor = "darkslategrey";
-            d.parentElement.style.color = "white";
-            d.parentElement.innerHTML = `<i class="material-icons" onclick="opendiv('vertical', this)">close</i>`
+            d.style.right = "16vw";
+            d.style.backgroundColor = "darkslategrey";
+            d.style.color = "white";
+            d.innerHTML = `<i class="material-icons" onclick="opendiv('vertical', this)">close</i>`
         }
     }
 }

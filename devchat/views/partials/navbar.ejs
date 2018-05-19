@@ -1,14 +1,14 @@
 <ul class="navbar">
     <li><a href="/"><h1 class="navlink">Dev<span style="font-weight:bold">Chat</span></h1><img src="/img/static/devchatlightbulb.svg"></a></li>
-    <li><button class="navlink menu"><i class="material-icons" onclick="opendiv('vertical', this)">menu</i></button></li>
+    <li><button class="navlink menu"onclick="opendiv('vertical',this)"><i class="material-icons">menu</i></button></li>
 </ul>
 <ul class="vertical" id="vertical" style="display:none">
     <%if(session.userId){%>
         <li><a href="/home" class="navlink">Projects</a></li>
         <%if(session.dev){%>
-            <li><a href="http://con.dev.us.to/devs/<%=session.user%>" class="navlink">Profile</a></li>
+            <li><a href="http://condev.us.to/devs/<%=session.user%>" class="navlink">Profile</a></li>
         <%}else{%>
-            <li><a href="http://con.dev.us.to/clients/<%=session.user%>" class="navlink">Profile</a></li>
+            <li><a href="http://condev.us.to/clients/<%=session.user%>" class="navlink">Profile</a></li>
         <%}%>
         <li><form action="/logout" method="post" class="link">
             <button class="navlink">Logout</button>

@@ -1,6 +1,6 @@
 <ul class="navbar">
     <li><a href="/"><h1 class="navlink">Con<span style="font-weight:bold">Dev</span></h1><img src="/img/static/condevlightbulb.svg"></a></li>
-    <li><button class="navlink menu"><i class="material-icons" onclick="opendiv('vertical', this)">menu</i></button></li>
+    <li><button class="navlink menu"onclick="opendiv('vertical',this)"><i class="material-icons">menu</i></button></li>
 </ul>
 <ul class="vertical" id="vertical" style="display:none">
     <%if(session.userId){%>
@@ -14,7 +14,7 @@
         <li><form action="/logout" method="post" class="link">
             <button class="navlink">Logout</button>
         </form></li>
-        <li><a href="http://chat.dev.us.to/home" class="navlink">Projects</a></li>
+        <li><a href="http://devchat.us.to/home" class="navlink">Projects</a></li>
     <%}else{%>
         <li><a href="/signup" class="navlink">Signup</a></li>
         <li><a href="/login" class="navlink">Login</a></li>

@@ -13,7 +13,11 @@ var fs = require('fs');
 var mongoose = require('mongoose');
 var methodOverride = require('method-override');
 var secret = process.env.SECRET || 'abcd123';
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 3000;
+var redis = require('redis');
+var redisStore = require('connect-redis')(session);
+var client = redis.createClient();
+var store = new redisStore({host:'localhost', port:6379, client:client, ttl:260});
 mongoose.connect('mongodb://127.0.0.1:27017/condev');
 mongoose.connection.on('open', function(err){
     if(err){
@@ -31,6 +35,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 //Cookie settings
 app.use(session({
+  store:store,
   secret: secret,
   saveUninitialized: true,
   resave: true,

@@ -10,12 +10,15 @@ var server = require('http').Server(app);
 var helmet = require('helmet');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var store = new session.MemoryStore();
 var routes = require('./routes');
 var sockets = require('./sockets/sockets.js');
 var expressValidator = require('express-validator');
 var secret = process.env.SECRET || 'abcd123';
 var port = process.env.PORT || 8080;
+var redis = require('redis');
+var redisStore = require('connect-redis')(session);
+var client = redis.createClient();
+var store = new redisStore({host:'localhost', port:6379, client:client, ttl:260});
 app.use(helmet({frameguard: {action: 'deny'}}));
 mongoose.connect('mongodb://127.0.0.1:27017/condev');
 mongoose.connection.on('open', function(err) {
