@@ -36,7 +36,7 @@
             <div class="posts-container block center">
                 <h1 class="heading" style="margin-top:0">Websites</h1>
                 <div class="posts">
-		    <%if(websites.length !== 0){
+		    <%if(websites.length !== 0){%>
 			<%for(var i = 0; i < websites.length; i++){%>
 			   <a href="/websites/<%=websites[i]._id%>" class="msg-box">
 			       <h2><%=websites[i].name%></h2>
@@ -44,7 +44,7 @@
 			   </a>
 			<%}%>
 		    <%}else{%>
-			<p>No websites found</p>
+			<p style="color:grey">No websites found</p>
 		    <%}%>
                 </div>
             </div>
