@@ -7,7 +7,7 @@ function opendiv(value, d){
             d.style.right = "0vw";
             d.style.backgroundColor = "transparent";
             d.style.color = "#474747";
-            d.innerHTML = `<i class="material-icons" onclick="opendiv('vertical', this)">menu</i>`
+            d.innerHTML = `<i class="material-icons">menu</i>`
         }
     }else{
         div.style.display = "block";
@@ -15,7 +15,7 @@ function opendiv(value, d){
             d.style.right = "16vw";
             d.style.backgroundColor = "darkslategrey";
             d.style.color = "white";
-            d.innerHTML = `<i class="material-icons" onclick="opendiv('vertical', this)">close</i>`
+            d.innerHTML = `<i class="material-icons">close</i>`
         }
     }
 }
