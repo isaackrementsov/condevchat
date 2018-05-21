@@ -49,5 +49,5 @@ module.exports =  function(app){
     router.post('/jobs:jobId/apply:websiteId', ep.checkDev, jobs.apply);
     router.post('/jobs:jobId/delete:websiteId/:name', ep.checkClient, jobs.delete);
     router.get('/:any', home.any);
-    app.use(errorHandler);
+    //app.use(errorHandler);
 }
