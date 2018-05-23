@@ -1,4 +1,5 @@
 var dbFind = require('../core/dbFind');
+var bcrypt = require('bcrypt');
 function comparePassword(obj, password, cb) {
   bcrypt.compare(password, obj.password, function(err, isMatch) {
     if(err) return cb(err);

@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+var bcrypt = require('bcrypt');
+var salt_factor = 10;
 var Schema = mongoose.Schema;
 var userSchema = new Schema({
     username: {type: String, unique:true},

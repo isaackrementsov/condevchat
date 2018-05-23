@@ -2,6 +2,7 @@ var dbFind = require('../core/dbFind');
 var dbCreate = require('../core/dbCreate');
 var dbUpdate = require('../core/dbUpdate');
 var fs = require('fs');
+var bcrypt = require('bcrypt');
 function comparePassword(obj, password, cb) {
   bcrypt.compare(password, obj.password, function(err, isMatch) {
     if(err) return cb(err);
@@ -47,6 +48,7 @@ module.exports = {
         }
         dbCreate.create('User', {username:req.body.username.trim(), password:req.body.password.trim(), dev:dev, gravatar:req.file.filename, createdAt:Date.now(), xp:0}, function(err, saved){
             if(err){
+		console.log(err)
                 req.session.err = ['Please use a unique username'];
                 res.redirect('/signup')
             }else{
