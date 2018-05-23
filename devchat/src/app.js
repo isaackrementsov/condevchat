@@ -19,6 +19,8 @@ var redis = require('redis');
 var redisStore = require('connect-redis')(session);
 var client = redis.createClient();
 var store = new redisStore({host:'localhost', port:6379, client:client, ttl:260});
+var cors = require('cors');
+app.use(cors());
 app.use(helmet({frameguard: {action: 'deny'}}));
 mongoose.connect('mongodb://127.0.0.1:27017/condev');
 mongoose.connection.on('open', function(err) {
