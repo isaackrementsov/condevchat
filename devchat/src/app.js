@@ -91,10 +91,11 @@ var connections = [];
 wss.on('connection', function connection(conn){
     var cookies = cookie.parse(conn.req.headers.cookie);
     var sid = cookieParser.signedCookie(cookies['connect.sid'], secret);
-    var requestSession = JSON.parse(store.returnSession(sid));
-    var index = connections.push({server:conn.server, username:requestSession.user, id:requestSession.chatId}) - 1;
-    conn.server.on('message', function(msg){
-        sockets.message(connections, index, {message:msg, author:requestSession.user, madeAt:Date.now()})
-    })
+    store.get(sid, function(err,sess){
+    var index = connections.push({server:conn.server, username:sess.user, id:sess.chatId}) - 1;
+	    conn.server.on('message', function(msg){
+		sockets.message(connections, index, {message:msg, author:sess.user, madeAt:Date.now()})
+	    })
+    });
 });
 routes(app)
