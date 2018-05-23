@@ -1,4 +1,4 @@
-var ws = new WebSocket('ws://localhost:8080');
+var ws = new WebSocket('ws://devchat.us.to');
 var chat = document.getElementsByClassName('chatList')[0];
 chat.scrollTop = chat.offsetHeight + 1000;
 function updateTime(){
