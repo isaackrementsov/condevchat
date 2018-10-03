@@ -20,10 +20,10 @@ var client = redis.createClient();
 var store = new redisStore({host:'localhost', port:6379, client:client, ttl:260});
 var cors = require('cors');
 app.use(cors());
-mongoose.connect('mongodb://127.0.0.1:27017/condev');
+mongoose.connect('mongodb://127.0.0.1:27017/condev'); //Connects to MongoDB (use terminal to query users)
 mongoose.connection.on('open', function(err){
     if(err){
-        fs.writeFile('../../logs/db.json', err, function(err){})
+        fs.writeFile('../../logs/db.json', err, function(err){}) //Logging code
     }
 });
 //Module middleware or setup
